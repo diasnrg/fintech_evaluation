@@ -3,8 +3,8 @@
 Used widgets: SliverList, Stack, DropdownButton, BoxDecoration and so on.<br />
 
 Screenshots:<br />
-![header](https://github.com/diasnrg/fintech_evaluation/blob/main/lib/screenshots/header.png)<br />
-![transactions](https://github.com/diasnrg/fintech_evaluation/blob/main/lib/screenshots/transactions.png)<br />
+<img src="https://github.com/diasnrg/fintech_evaluation/blob/main/screenshots/header.png" width="200">
+<img src="https://github.com/diasnrg/fintech_evaluation/blob/main/screenshots/transactions.png" width="200"><br />
 
 Demo:<br />
-![screen record](https://github.com/diasnrg/fintech_evaluation/blob/main/lib/screenshots/record.gif)<br />
+<img src="https://github.com/diasnrg/fintech_evaluation/blob/main/screenshots/record.gif" width="200"><br />
