@@ -8,24 +8,27 @@ class TransactionsListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final transactions = account.transactions;
+    if (account.transactions.isEmpty) {
+      return _emptyState;
+    }
 
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
-          bool showDividerByDate = needToShowDividerByDay(index);
+          final bool showDividerByDate = needToShowDividerByDay(index);
+          final currentTransaction = account.transactions[index];
 
           return Column(
             children: [
               if (showDividerByDate)
                 DividerByDay(
                   date:
-                      '${transactions[index].month}, ${transactions[index].date.day}',
+                      '${currentTransaction.month}, ${currentTransaction.date.day}',
                 ),
               TransactionItemView(
-                transaction: transactions[index],
+                transaction: currentTransaction,
               ),
-              if (index != transactions.length)
+              if (index != account.transactions.length)
                 const Divider(
                   height: 1,
                   thickness: 1,
@@ -34,33 +37,57 @@ class TransactionsListView extends StatelessWidget {
             ],
           );
         },
-        childCount: transactions.length,
+        childCount: account.transactions.length,
+      ),
+    );
+  }
+
+  Widget get _emptyState {
+    return SliverToBoxAdapter(
+      child: SizedBox(
+        height: 128,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: const [
+            Text(
+              'Transactions history is empty.',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            )
+          ],
+        ),
       ),
     );
   }
 
   bool needToShowDividerByDay(int index) {
     return index == 0 ||
-        (index + 1 < account.transactions.length &&
-            account.transactions[index].date.day !=
-                account.transactions[index + 1].date.day);
+        index > 0 &&
+            account.transactions[index - 1].date.day !=
+                account.transactions[index].date.day;
   }
 }
 
 class TransactionItemView extends StatelessWidget {
   const TransactionItemView({super.key, required this.transaction});
   final Transaction transaction;
-  final boldTextStyle =
+  final TextStyle boldTextStyle =
       const TextStyle(fontSize: 18, fontWeight: FontWeight.w500);
 
   @override
   Widget build(BuildContext context) {
-    final amount =
+    final String amount =
         '${(transaction.isIncome ? '+' : '-')} ${transaction.currency.sign}${transaction.amount.toStringAsFixed(2)} ${transaction.currency}';
+    final bool hasImage = transaction.imageSrc != null;
 
     return ListTile(
-      leading: CircleAvatar(radius: 18, child: Text(transaction.name[0])),
-      title: Text(transaction.name, style: boldTextStyle),
+      leading: CircleAvatar(
+        radius: 18,
+        foregroundImage: hasImage
+            ? Image.asset('assets/images/${transaction.imageSrc!}').image
+            : null,
+        child: !hasImage ? Text(transaction.accountName[0]) : null,
+      ),
+      title: Text(transaction.accountName, style: boldTextStyle),
       subtitle: Text(transaction.time),
       trailing: Text(amount, style: boldTextStyle),
       contentPadding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),

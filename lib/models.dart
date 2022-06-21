@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'dart:math';
 
 import 'data.dart';
@@ -7,10 +6,16 @@ class Account {
   final Currency currency;
   final double balance;
   final List<Transaction> _transactions;
+  final String? imageSrc;
 
-  Account(this.currency, this.balance, this._transactions);
+  Account(this.currency, this.balance, this._transactions, {this.imageSrc});
   factory Account.template() {
-    return Account(Currency.USD, 1533.21, Repository.transactions);
+    return Account(
+      Currency.USD,
+      1533.21,
+      Repository.transactions,
+      imageSrc: 'usa_flag.png',
+    );
   }
 
   List<Transaction> get transactions => _transactions;
@@ -21,29 +26,31 @@ class Account {
 }
 
 class Transaction {
-  final String name;
+  final String accountName;
   final double amount;
   final bool isIncome;
   final Currency currency;
-  final ImageProvider<Object>? imageProvider;
+  final String? imageSrc;
   final DateTime date;
 
   Transaction(
-    this.name,
+    this.accountName,
     this.amount, {
     this.isIncome = true,
     this.currency = Currency.USD,
-    this.imageProvider,
+    this.imageSrc,
   }) : date = DateTime(
           2022,
           1,
-          Random().nextInt(5) + 10,
+          1 + Random().nextInt(5),
           Random().nextInt(24),
           Random().nextInt(60),
         );
 
+  static const String defaultMonth = 'Jan';
+
   String get time => '${date.hour}:${date.minute}';
-  String get month => 'Jan';
+  String get month => defaultMonth;
 }
 
 enum Currency {

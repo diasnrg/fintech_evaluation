@@ -7,7 +7,7 @@ class Repository {
 
   static List<Transaction> get transactions {
     _transactions ??= _generateRandomTransactions();
-    _transactions!.sort((a, b) => a.date.compareTo(b.date));
+    _transactions!.sort((a, b) => b.date.compareTo(a.date));
     return _transactions!;
   }
 
@@ -16,18 +16,27 @@ class Repository {
     final random = Random();
     return List.generate(
       itemsCount,
-      (index) {
-        final double r = random.nextInt(100).toDouble();
-        final String name;
-        if (r % 3 == 0) {
-          name = 'McDonalds';
-        } else if (r % 4 == 0) {
-          name = 'Nike';
+      (_) {
+        final double randomValue = random.nextInt(1000).toDouble();
+        final String accountName;
+        final String imageSrc;
+        if (randomValue % 3 == 0) {
+          accountName = 'McDonalds';
+          imageSrc = 'mc.png';
+        } else if (randomValue % 3 == 1) {
+          accountName = 'Nike';
+          imageSrc = 'nike.jpeg';
         } else {
-          name = 'Starbucks';
+          accountName = 'Starbucks';
+          imageSrc = 'starbucks.png';
         }
 
-        return Transaction(name, r * index, isIncome: r % 2 == 0);
+        return Transaction(
+          accountName,
+          randomValue,
+          isIncome: randomValue % 2 == 0,
+          imageSrc: imageSrc,
+        );
       },
     );
   }

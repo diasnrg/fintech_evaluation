@@ -14,6 +14,8 @@ class AccountHeaderViewState extends State<AccountHeaderView> {
   late bool balanceIsHidden;
   late final Account account;
 
+  static const String balanceHiddenValue = '\$ XXX.XX';
+
   @override
   void initState() {
     super.initState();
@@ -35,7 +37,8 @@ class AccountHeaderViewState extends State<AccountHeaderView> {
             children: [
               CircleAvatar(
                 radius: 36,
-                child: Text(account.currency.toString()),
+                foregroundImage:
+                    Image.asset('assets/images/${account.imageSrc}').image,
               ),
               const SizedBox(height: 16),
               Stack(
@@ -50,15 +53,16 @@ class AccountHeaderViewState extends State<AccountHeaderView> {
                   Positioned(
                     right: 12,
                     child: HideButton(
-                        onTap: () =>
-                            setState(() => balanceIsHidden = !balanceIsHidden)),
+                      onTap: () =>
+                          setState(() => balanceIsHidden = !balanceIsHidden),
+                    ),
                   ),
                 ],
               ),
               const SizedBox(height: 16),
               Text(
                 balanceIsHidden
-                    ? '\$ XXX.XX'
+                    ? balanceHiddenValue
                     : '${account.currency.sign} ${account.balance}',
                 style: const TextStyle(color: Colors.white, fontSize: 28),
               ),
@@ -79,7 +83,7 @@ class PositionedAppBar extends StatelessWidget {
     double screenWidth = MediaQuery.of(context).size.width;
 
     return Positioned(
-      top: 42,
+      top: 48,
       left: 24,
       right: 24,
       child: SizedBox(
@@ -92,7 +96,7 @@ class PositionedAppBar extends StatelessWidget {
               color: Colors.white,
             ),
             Icon(
-              Icons.share,
+              Icons.ios_share,
               color: Colors.white,
             ),
           ],
@@ -110,10 +114,10 @@ class HideButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 14),
       decoration: BoxDecoration(
           border: Border.all(color: Colors.white12),
-          borderRadius: BorderRadius.circular(8)),
+          borderRadius: BorderRadius.circular(12)),
       child: InkWell(
         onTap: onTap,
         child: Text(isHidden ? 'Show' : 'Hide',
